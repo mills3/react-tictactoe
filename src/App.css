@@ -1,0 +1,200 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 16px;
+
+  --mainColor: #2a2a2a;
+  --cellFrontColor: #3a3a3a;/*---This will be changed---*/
+  --textColor: #f2f2f2;
+
+  --gridSize: 20rem;
+  --cellFontSize: calc(var(--gridSize) / 12);/*---Keep it in proportion with tile---*/
+  --cellColor: #2a2a2a;
+  --highlight: #df2525;
+  --shadow: #fff;
+}
+
+body {
+  overflow: hidden;
+}
+
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 2fr 1fr;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+
+  background: var(--mainColor);
+  color: var(--textColor);
+}
+
+.theme {
+  width: 1rem;
+  height: 1rem;
+  background: var(--textColor);
+  position: absolute;
+  top: 2rem;
+  left: 1rem;
+}
+
+.top {
+  position: relative;
+}
+/*===============Select X or O component===================*/
+.selection, .message {
+  text-align: center;
+  align-self: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button {
+  /*height: 2rem;*/
+  background: var(--cellFrontColor);
+  border: none;
+  color: var(--textColor);
+  font-size: 1.1em;
+  margin: 0.2rem;
+  padding: .3rem 1rem;
+  transition:  background 0.5s;
+}
+
+button:hover {
+  background: var(--highlight);
+}
+
+/*------I think this applies to all components that use transitionName: 'fade'----*/
+.fade-enter {
+  opacity: 0.01;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+  transition-delay: 300ms;
+}
+.fade-leave {
+  opacity: 1;
+}
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 200ms ease-in;
+}
+
+/*========================================================*/
+
+.grid {
+  grid-row: 2;
+  justify-self: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 0.5rem;
+  width: var(--gridSize);
+  height: var(--gridSize);
+}
+
+/*===========================Styles for the cells and animations==============*/
+.cellContainer {
+  position: relative;
+  perspective: 500px;
+}
+
+.cell {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  font-size: var(--cellFontSize);
+}
+
+/*=======Add this class if 'intro' is true ===============*/
+.introCell {
+  animation: flip 4s forwards;
+}
+
+@keyframes flip {
+  0% {  transform: rotateY(0); }
+  10% { transform: rotateY(180deg); }
+  90% { transform: rotateY(180deg); }
+  100% { transform: rotateY(0); }
+}
+
+.flip {
+  transform: rotateY(180deg);
+}
+
+.cell div {
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.back {
+  transform: rotateY(180deg);
+  background: var(--highlight);
+  color: var(--mainColor);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+}
+
+.flash {
+  animation: flash 0.6s infinite ease-in-out;
+  animation-delay: 0.5s;
+}
+
+@keyframes flash {
+  0% { box-shadow: 5px 0 0 var(--shadow); }
+  25% { box-shadow: 0 5px 0 var(--shadow); }
+  50% { box-shadow: -5px 0 0 var(--shadow); }
+  75% { box-shadow: 0 -5px 0 var(--shadow); }
+}
+
+.front {
+  background: var(--cellFrontColor);
+}
+
+/*====================================*/
+
+.scores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score {
+  color: var(--textColor);
+  min-width: 12rem;
+  text-align: center;
+  margin: 1rem;
+}
+
+@media (orientation: landscape) {
+  :root {
+    --gridSize: 60vmin;
+  }
+
+  .scores {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    font-size: 20px;
+  }
+}
